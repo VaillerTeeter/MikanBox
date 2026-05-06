@@ -2694,7 +2694,7 @@ jobs:
 
       - name: Set up Helm
         if: steps.check.outputs.count != '0'
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
         with:
           version: "latest"
 
