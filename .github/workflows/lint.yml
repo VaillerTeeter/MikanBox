@@ -2169,7 +2169,7 @@ jobs:
 
       - name: Set up Julia
         if: steps.check.outputs.count != '0'
-        uses: julia-actions/setup-julia@v2
+        uses: julia-actions/setup-julia@v3
         with:
           version: "1"
 
