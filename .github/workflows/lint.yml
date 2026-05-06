@@ -297,7 +297,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "21"
@@ -856,7 +856,7 @@ jobs:
 
       - name: Set up JDK
         if: steps.check-kt.outputs.found == 'true'
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "21"
@@ -1196,7 +1196,7 @@ jobs:
 
       - name: Set up JDK
         if: steps.check-scala.outputs.found == 'true'
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: "21"
@@ -2362,7 +2362,7 @@ jobs:
 
       - name: Set up Java (for cljfmt)
         if: steps.check.outputs.count != '0'
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: "17"
           distribution: "temurin"
@@ -3906,7 +3906,7 @@ jobs:
 
       - name: Set up Java
         if: steps.check.outputs.count != '0'
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: "17"
           distribution: "temurin"
