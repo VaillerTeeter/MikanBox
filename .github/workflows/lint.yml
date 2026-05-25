@@ -219,6 +219,30 @@ jobs:
           scandir: "."
 
   # ============================================================
+  # React Doctor
+  # ============================================================
+  react-doctor:
+    name: React Doctor (code quality scan)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Run React Doctor
+        uses: millionco/react-doctor@v0
+        with:
+          directory: src
+          diff: ${{ github.base_ref }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          annotations: "true"
+          fail-on: "warning"
+          verbose: "true"
+
+  # ============================================================
   # PowerShell
   # ============================================================
   powershell-lint:
@@ -408,6 +432,7 @@ jobs:
       - stylelint-lint
       - rust-lint
       - shell-lint
+      - react-doctor
       - powershell-lint
       - secret-scan
       - semgrep-scan
