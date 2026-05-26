@@ -31,7 +31,9 @@
 │   │   └── scripts/
 │   │       └── git-guard.sh                       # git/gh 危险写操作拦截脚本
 │   ├── instructions/                               # GitHub Copilot 指令文件
-│   │   └── git-workflow.instructions.md           # AI git 操作行为规范
+│   │   ├── context7.instructions.md              # Context7 MCP 文档查询规范
+│   │   ├── git-workflow.instructions.md           # AI git 操作行为规范
+│   │   └── react-bits.instructions.md            # React Bits 组件引入规范
 │   ├── ISSUE_TEMPLATE/                            # Issue 模板（中英文 bug/feature 各一份）
 │   ├── PULL_REQUEST_TEMPLATE.md                   # PR 描述模板
 │   └── workflows/
@@ -63,22 +65,31 @@
 │   │   ├── .shellcheckrc                          # ShellCheck 配置
 │   │   └── PSScriptAnalyzerSettings.psd1          # PowerShell 静态分析规则
 │   └── security/
-│       ├── .gitleaks.toml                         # 密钥泄露扫描规则
 │       └── .semgrep.yml                           # OWASP Top 10 安全扫描规则（TS + Rust）
 ├── .vscode/                                        # VS Code 工作区配置
 │   ├── extensions.json                            # 推荐扩展列表
-│   ├── mcp.json                                   # MCP Server 配置（GitHub MCP）
+│   └── mcp.json                                   # MCP Server 配置（GitHub MCP + Context7）
 │   └── settings.json                              # 工作区设置（格式化/lint/Tauri 等）
 ├── public/                                         # 静态资源（Vite 原样复制）
-│   ├── tauri.svg
-│   └── vite.svg
 ├── scripts/
 │   └── setup-windows.ps1                          # Windows 开发环境一键检查/安装脚本
 ├── src/                                            # React 前端源代码
 │   ├── assets/
-│   │   └── react.svg
-│   ├── App.css
-│   ├── App.tsx                                    # 根组件
+│   │   └── fonts/
+│   │       └── ZCOOLKuaiLe-Regular.ttf            # 站酷快乐体（内置，无需网络）
+│   ├── pages/                                      # 页面组件（每项导航对应一个页面）
+│   │   ├── BacklogPage.tsx                        # 想看
+│   │   ├── DownloadPage.tsx                       # 下载
+│   │   ├── FinishedPage.tsx                       # 看过
+│   │   ├── QueryPage.tsx                          # 季度查询
+│   │   ├── SearchPage.tsx                         # 搜索
+│   │   ├── TracksPage.tsx                         # 轨道工具
+│   │   └── WatchingPage.tsx                       # 在看
+│   ├── styles/
+│   │   ├── fonts.css                              # @font-face 声明（引用内置字体文件）
+│   │   └── theme.css                              # 主题 CSS 变量（皮肤切换入口）
+│   ├── App.css                                    # 全局布局样式
+│   ├── App.tsx                                    # 根组件（主窗口布局：顶栏 + 左侧导航栏）
 │   ├── main.tsx                                   # React 入口
 │   └── vite-env.d.ts                              # Vite 类型声明
 ├── src-tauri/                                      # Tauri/Rust 后端
@@ -164,7 +175,7 @@ yarn install
 # Windows PowerShell — 启动完整 Tauri 桌面窗口（热重载）
 yarn tauri dev
 
-# WSL / macOS 浏览器预览（Vite dev server，localhost:1420）
+# WSL / macOS 浏览器预览（Vite dev server，localhost:1520）
 yarn dev
 ```
 
@@ -179,7 +190,7 @@ yarn tauri build
 
 > 详细的 CI 检查规则文档已独立维护，请参阅 [ci-checks.md](.github/docs/ci/ci-checks.md)。
 
-`lint.yml` 包含以下 14 项检查：
+`lint.yml` 包含以下 15 项检查：
 
 | 检查项 | 工具 | 覆盖范围 |
 |---|---|---|
@@ -190,6 +201,7 @@ yarn tauri build
 | stylelint-lint | Stylelint | `src/**/*.css` |
 | rust-lint | clippy + rustfmt | `src-tauri/src/**/*.rs` |
 | shell-lint | ShellCheck | `**/*.sh` |
+| react-doctor | millionco/react-doctor | `src/` |
 | powershell-lint | PSScriptAnalyzer | `**/*.ps1` |
 | secret-scan | Gitleaks | 全仓库 |
 | semgrep-scan | Semgrep | `src/` + `src-tauri/src/` |
@@ -210,7 +222,9 @@ yarn tauri build
 
 | 文件 | 说明 |
 |---|---|
+| `context7.instructions.md` | 库/框架文档查询规范（Context7 MCP 工具调用顺序与 library ID 选择） |
 | `git-workflow.instructions.md` | AI git 操作行为规范（授权要求、分支命名、提交规范、PR 工作流） |
+| `react-bits.instructions.md` | React Bits 动效组件引入规范（源码复制方式，非 npm 包） |
 
 ## 相关链接
 
