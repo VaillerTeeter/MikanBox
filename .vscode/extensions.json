@@ -69,6 +69,7 @@
     "oderwat.indent-rainbow",
     "christian-kohler.path-intellisense",
     "kisstkondoros.vscode-gutter-preview",
-    "adpyke.codesnap"
+    "adpyke.codesnap",
+    "tauri-apps.tauri-vscode"
   ]
 }

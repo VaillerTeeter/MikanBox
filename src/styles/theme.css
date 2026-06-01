@@ -1,0 +1,74 @@
+/* ─────────────────────────────────────────────────
+   Default theme — warm parchment (animal-island-ui)
+   规范：仅允许在此文件中定义 --theme-* CSS 变量。
+   App.css 中所有颜色 / 字体 / 尺寸必须引用这里的变量。
+   换肤时只需替换 / 覆盖此文件即可。
+   ───────────────────────────────────────────────── */
+:root {
+  /* ── Layout ─────────────────────────────────── */
+  --theme-topbar-height:    48px;
+  --theme-sidebar-width:    56px;
+
+  /* ── Surface（背景 / 边框） ──────────────────── */
+  --theme-bar-bg:           #f0e8d8;    /* 顶栏 / 侧栏底色 */
+  --theme-bar-border:       #e8e2d6;    /* 分割线 / 卡片边框 */
+  --theme-content-bg:       #f8f8f0;    /* 主内容区底色 */
+  --theme-card-bg:          #fff9f0;    /* 内容卡片底色 */
+  --theme-badge-bg:         #f0e8d8;    /* 小徽章底色（同 bar-bg） */
+  --theme-tag-bg:           #f5ede0;    /* 标签底色 */
+  --theme-tag-border:       #e8d8c0;    /* 标签边框 */
+  --theme-white:            #ffffff;    /* 纯白，用于输入/预览框背景 */
+  --theme-bg-primary:       #ffffff;    /* 输入框 / 表单控件背景（同白） */
+  --theme-bg-secondary:     #f5f5f5;    /* 次级背景（诊断行等轻量区块） */
+
+  /* ── Text（文字色） ──────────────────────────── */
+  --theme-bar-text:         #794f27;    /* 顶栏 / 侧栏文字 */
+  --theme-text-primary:     #4a3525;    /* 主要内容文字 */
+  --theme-text-secondary:   #6b5a4e;    /* 次要文字 */
+  --theme-text-muted:       #8a7a6a;    /* 弱化文字 */
+  --theme-text-error:       #c0392b;    /* 错误提示 */
+  --theme-text-score:       #c07a2a;    /* 评分高亮（琥珀色） */
+  --theme-text-on-accent:   #ffffff;       /* 彩色 / 深色背景上的文字 */
+  --theme-back-btn-bg:      #e05c5c;    /* 返回按钮底色（红色） */
+  --theme-back-btn-bg-hover:#cc4a4a;    /* 返回按钮 hover */
+  --theme-back-btn-bg-active:#b53939;   /* 返回按钮按下 / 阴影 */
+
+  /* ── Interaction ─────────────────────────────── */
+  --theme-nav-hover-bg:     #794f27;    /* 导航按钮 hover */
+  --theme-nav-active-bg:    #794f27;    /* 导航按钮选中 */
+
+  /* ── Scrollbar ───────────────────────────────── */
+  --theme-scrollbar:        #c4b89e;    /* 滑块颜色 */
+  /* ── Shadow ───────────────────────────────────── */
+  --theme-card-shadow:      rgba(0, 0, 0, 0.12);
+  /* ── Table ──────────────────────────────────────── */
+  --theme-table-header-bg:  #f7f3df;    /* animal-island-ui 表头底色 */
+  --theme-seeders-color:    #2a8a2a;    /* 做种数绿色 */
+  --theme-leechers-color:   #c04040;    /* 下载中红色 */
+  /* ── DownloadPage 状态色 ─────────────────────── */
+  --theme-dl-badge-active-bg:    #e8f7f0;  /* 下载中徽章底色 */
+  --theme-dl-badge-active-color: #2a8a5a;  /* 下载中徽章文字 */
+  --theme-dl-badge-done-bg:      #eef3ff;  /* 已完成徽章底色 */
+  --theme-dl-badge-done-color:   #3a6ad4;  /* 已完成徽章文字 / 进度条 */
+  --theme-dl-badge-error-bg:     #fde8e8;  /* 错误徽章底色 */
+  --theme-hint-ok-bg:            #e6f7e6;  /* 成功提示底色（浅绿） */
+  --theme-hint-ok-color:         #267326;  /* 成功提示文字（深绿） */
+  --theme-dl-error-card-bg:      #fff5f5;  /* 错误卡片底色 */
+  --theme-dl-nav-count-active-bg: rgba(255,255,255,0.25); /* 激活导航徽章底色 */  --theme-dl-badge-interrupted-bg:    #fff3e0;  /* 中断徽章背景（浅橙） */
+  --theme-dl-badge-interrupted-color: #c07000;  /* 中断徽章文字（深橙） */
+  --theme-dl-badge-cancelled-bg:      var(--theme-tag-bg); /* 已取消徽章背景 */
+  --theme-dl-badge-cancelled-color:   var(--theme-text-muted); /* 已取消徽章文字 */  /* ── Typography ─────────────────────────────── */
+  /* 站酷快乐体 — 字体文件内置于 src/assets/fonts/，无需网络 */
+  --theme-font:             'ZCOOL KuaiLe', 'Zen Maru Gothic', 'Noto Sans SC', sans-serif;
+  --theme-title-size:       20px;
+  --theme-title-weight:     500;
+  --theme-title-spacing:    0.04em;
+  /* ── SettingsPage ─────────────────────────────── */
+  --theme-settings-dirty-color: #b45309;  /* 未保存提示文字 */
+
+  /* ── TracksPage ──────────────────────────────── */
+  --theme-tw-badge-a-bg:    #e8f0ff;   /* A版徽章底色 */
+  --theme-tw-badge-a-color: #3a6ad4;   /* A版徽章文字 */
+  --theme-tw-badge-b-bg:    #e8f5e8;   /* B版徽章底色 */
+  --theme-tw-badge-b-color: #2a7a2a;   /* B版徽章文字 */
+}

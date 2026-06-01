@@ -1,49 +1,17 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
 
-  "entry": [
-    "src/index.{js,ts,jsx,tsx}",
-    "src/main.{js,ts,jsx,tsx}",
-    "src/app.{js,ts,jsx,tsx}",
-    "src/server.{js,ts}",
-    "src/pages/**/*.{js,ts,jsx,tsx}",
-    "src/app/**/{page,layout,loading,error,not-found}.{js,ts,jsx,tsx}",
-    "src/routes/**/*.{js,ts}",
-    "bin/**/*.{js,ts}",
-    "scripts/**/*.{js,ts}"
-  ],
+  "entry": ["src/main.tsx", "vite.config.ts"],
 
-  "project": ["src/**/*.{js,ts,jsx,tsx}", "lib/**/*.{js,ts}", "utils/**/*.{js,ts}"],
+  "project": ["src/**/*.{ts,tsx}", "vite.config.ts"],
 
-  "ignore": [
-    "**/*.d.ts",
-    "**/*.test.{js,ts,jsx,tsx}",
-    "**/*.spec.{js,ts,jsx,tsx}",
-    "**/__tests__/**",
-    "**/__mocks__/**",
-    "node_modules/**",
-    "dist/**",
-    "build/**",
-    ".next/**",
-    ".nuxt/**",
-    "coverage/**",
-    "*.config.{js,ts,mjs,cjs}",
-    "vite.config.*",
-    "vitest.config.*",
-    "jest.config.*",
-    "webpack.config.*",
-    "rollup.config.*",
-    "eslint.config.*",
-    "prettier.config.*",
-    "tailwind.config.*",
-    "postcss.config.*"
-  ],
+  "ignore": [],
 
-  "ignoreDependencies": ["@types/*"],
+  "ignoreDependencies": ["@commitlint/types"],
 
-  "ignoreBinaries": [],
+  "ignoreBinaries": ["commitlint", "cspell", "eslint", "prettier", "tauri"],
 
-  "includeEntryExports": true,
+  "includeEntryExports": false,
 
   "exclude": [],
 
@@ -58,22 +26,9 @@
     "exports": "error",
     "nsExports": "error",
     "classMembers": "error",
-    "nsClassMembers": "error",
     "types": "error",
     "nsTypes": "error",
     "enumMembers": "error",
     "duplicates": "error"
-  },
-
-  "workspaces": {
-    ".": {
-      "entry": ["src/index.{js,ts,jsx,tsx}", "src/main.{js,ts,jsx,tsx}"]
-    },
-    "packages/*": {
-      "entry": ["src/index.{js,ts,jsx,tsx}", "{src,lib}/index.{js,ts}"]
-    },
-    "apps/*": {
-      "entry": ["src/index.{js,ts,jsx,tsx}", "src/main.{js,ts,jsx,tsx}", "src/app.{js,ts,jsx,tsx}"]
-    }
   }
 }

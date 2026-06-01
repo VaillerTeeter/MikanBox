@@ -8,7 +8,8 @@
 .github/hooks/
 ├── git-guard.json          # Hook 注册配置
 └── scripts/
-    └── git-guard.sh        # 拦截逻辑脚本
+    ├── git-guard.sh        # Linux / macOS 拦截脚本（bash + python3）
+    └── git-guard.py        # Windows 拦截脚本（纯 Python 3，无需 bash）
 ```
 
 ## 工作原理
@@ -123,7 +124,7 @@ mcp_github_get_* / mcp_github_list_* / mcp_github_search_*
 
 ## 测试方法
 
-在项目根目录执行：
+### Linux / macOS
 
 ```bash
 # 应被拦截（输出 JSON 且 permissionDecision == "ask"）
@@ -141,20 +142,41 @@ echo '{"toolName":"run_in_terminal","toolInput":{"command":"npm install"}}' \
   | bash .github/hooks/scripts/git-guard.sh && echo "PASS"
 ```
 
+### Windows（PowerShell）
+
+```powershell
+# 应被拦截
+'{"toolName":"run_in_terminal","toolInput":{"command":"git add ."}}' |
+  python .github/hooks/scripts/git-guard.py
+
+'{"toolName":"run_in_terminal","toolInput":{"command":"gh pr merge 42 --merge"}}' |
+  python .github/hooks/scripts/git-guard.py
+
+# 应直接放行（无输出，exit 0）
+'{"toolName":"run_in_terminal","toolInput":{"command":"git log --oneline"}}' |
+  python .github/hooks/scripts/git-guard.py ; if ($LASTEXITCODE -eq 0) { "PASS" }
+
+'{"toolName":"run_in_terminal","toolInput":{"command":"yarn install"}}' |
+  python .github/hooks/scripts/git-guard.py ; if ($LASTEXITCODE -eq 0) { "PASS" }
+```
+
 ## 维护说明
 
-- 新增 `run_in_terminal` 拦截规则：在 `git-guard.sh` 中内嵌的 Python 检测逻辑里，在 `for seg_tokens in split_shell_segments(cmd)` 循环的 `if tool == 'git'` / `elif tool == 'gh'` 分支中，按现有格式追加新的命令匹配条件与对应原因说明
-- 新增 MCP 工具拦截：扩展 `elif printf '%s' "$TOOL_NAME" | grep -qiE '...'` 中的正则，追加新工具名
-- 修改超时：调整 `git-guard.json` 中的 `timeout`（单位：秒，当前 5s）
+- **新增 `run_in_terminal` 拦截规则**：
+  - Linux/macOS：修改 `git-guard.sh` 中内嵌的 Python 检测逻辑（`inspect_tokens` 函数内的 `if tool == 'git'` / `elif tool == 'gh'` 分支）
+  - Windows：修改 `git-guard.py` 中的 `inspect_tokens` 函数，逻辑与 `git-guard.sh` 保持一致
+- **新增 MCP 工具拦截**：两个脚本均需更新正则表达式（`_MCP_WRITE_RE` 变量 / `grep -qiE` 模式）
+- **修改超时**：调整 `git-guard.json` 中的 `timeout`（单位：秒，当前 5s）
 - 此 Hook 对全体团队成员生效（配置存于 `.github/hooks/`，随仓库提交）
 
 ## 平台说明
 
-Hook 脚本（`git-guard.sh`）依赖 `bash` 和 `python3`，在 Linux / macOS 上通常开箱即用。
+| 平台 | 脚本 | 依赖 |
+|---|---|---|
+| Linux / macOS | `git-guard.sh` | `bash` + `python3` |
+| Windows | `git-guard.py` | Python 3.6+（`python` 命令） |
 
-**Windows 前提条件：** 需要在 PATH 中同时可用的 `bash` 和 `python3`，可通过以下方式满足：
+**Windows 前提条件**：安装 [Python 3](https://www.python.org/downloads/windows/) 并在安装时勾选 **"Add Python to PATH"**，确保终端中可执行 `python`。
 
-- [Git for Windows](https://gitforwindows.org/)（安装时勾选"Git Bash"并添加到 PATH），或使用 WSL（Windows Subsystem for Linux）提供 `bash`
-- 安装 [Python 3](https://www.python.org/downloads/windows/) 并勾选添加入 PATH，确保终端中可执行 `python3`（若环境默认提供的是 `py`，请额外配置 `python3` 命令）
-
-如果 `bash` 或 `python3` 不在 PATH 中，Claude Code 在加载或执行 Hook 时可能报错。
+- 若 `python` 命令不可用，可尝试 `python3` 或 `py`（Python Launcher）；此时需同步修改 `git-guard.json` 中的 `"windows"` 字段
+- 若环境中 `python` 指向 Python 2，请改用 `python3` 或 `py -3`

@@ -1,45 +1,59 @@
-# Taplo — TOML 代码格式化配置
+# Taplo — TOML 格式化配置
 # 用法：taplo fmt --check --config .lintrc/data-formats/toml/taplo.toml <files>
 # 文档：https://taplo.tamasfe.dev/configuration/
 
 [formatting]
-# 对齐注释（行尾 #...）
+# 对齐同一表格内的行尾注释
 align_comments = true
 
-# 对齐数组中的条目
-align_entries = false
+# 对齐同一表格内的键值对（等号纵向对齐，提升可读性）
+align_entries = true
 
-# 数组中允许多少个内联元素
+# 短数组自动折叠为单行
 array_auto_collapse = true
+
+# 超出 column_width 时自动展开数组为多行
 array_auto_expand = true
+
+# 多行数组末尾保留逗号
 array_trailing_comma = true
 
-# 列宽（超过时展开数组/表格）
-column_width = 120
+# 列宽上限（与 rustfmt max_width 保持一致）
+column_width = 100
 
-# 缩进字符
-indent_string = "  " # 2 空格
+# 紧凑数组模式（关闭，多行展开可读性更好）
+compact_arrays = false
 
-# 表格间的空行数
-indent_tables = false
+# 紧凑内联表（关闭，保持展开风格）
+compact_inline_tables = false
+
+# 缩进字符（2 空格，与 .editorconfig 全局设置一致）
+indent_string = "  "
+
+# 子表格缩进（开启，层级更清晰）
+indent_tables = true
+
+# 文件末尾保留换行符
 trailing_newline = true
 
-# 重新排序 key（通常关闭，以保持语义顺序）
+# 禁止重排键（保留语义顺序，避免自动排序破坏依赖语义的 TOML 结构）
 reorder_keys = false
+
+# 禁止重排数组（保留语义顺序）
 reorder_arrays = false
 
 [schema]
 # 开启 JSON Schema 验证（taplo check）
 enabled = true
 
-# 内置已知 TOML 文件的 schema 关联
+# 关联已知 TOML 文件的 Schema
 [[rule]]
 name = "Cargo.toml"
-include = ["Cargo.toml", "Cargo.lock"]
+include = ["**/Cargo.toml"]
 
 [[rule]]
-name = "pyproject.toml"
-include = ["pyproject.toml"]
+name = "Cargo.lock"
+include = ["**/Cargo.lock"]
 
 [[rule]]
 name = "taplo.toml"

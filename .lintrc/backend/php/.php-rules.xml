@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="PHP Rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
-    https://pmd.sourceforge.net/ruleset_2_0_0.xsd">
-  <description>PHP 代码检查规则文档（实际工具：PHP_CodeSniffer + PHPStan + PHPMD）</description>
-</ruleset>

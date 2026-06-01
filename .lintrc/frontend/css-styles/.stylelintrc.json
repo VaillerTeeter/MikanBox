@@ -1,6 +1,9 @@
 {
-  "extends": ["stylelint-config-standard", "stylelint-config-recess-order"],
-  "plugins": ["stylelint-scss"],
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-recess-order",
+    "stylelint-config-tailwindcss"
+  ],
   "rules": {
     "alpha-value-notation": ["percentage", { "exceptProperties": ["opacity"] }],
     "color-function-notation": "modern",
@@ -23,8 +26,13 @@
     "shorthand-property-no-redundant-values": true,
     "declaration-block-no-redundant-longhand-properties": true,
     "declaration-block-no-duplicate-custom-properties": true,
+    "declaration-block-single-line-max-declarations": 1,
     "declaration-property-value-disallowed-list": {
       "border": ["none"],
+      "border-top": ["none"],
+      "border-right": ["none"],
+      "border-bottom": ["none"],
+      "border-left": ["none"],
       "outline": ["none"]
     },
     "media-feature-name-no-vendor-prefix": true,
@@ -45,6 +53,8 @@
     "selector-max-combinators": 3,
     "selector-max-specificity": "0,3,0",
     "selector-max-pseudo-class": 3,
+    "selector-max-type": [1, { "ignore": ["descendant", "child"] }],
+    "selector-max-attribute": 2,
     "selector-class-pattern": "^[a-z][a-z0-9-_]*$",
     "selector-id-pattern": "^[a-z][a-z0-9-_]*$",
     "keyframes-name-pattern": "^[a-z][a-z0-9-]*$",
@@ -53,72 +63,14 @@
     "max-nesting-depth": 3,
     "comment-no-empty": true,
     "unit-allowed-list": [
-      "px",
-      "em",
-      "rem",
-      "%",
-      "vh",
-      "vw",
-      "vmin",
-      "vmax",
-      "vb",
-      "vi",
-      "svh",
-      "svw",
-      "dvh",
-      "dvw",
-      "lvh",
-      "lvw",
-      "cqw",
-      "cqh",
-      "cqi",
-      "cqb",
-      "fr",
-      "ch",
-      "ex",
-      "ic",
-      "lh",
-      "rlh",
-      "deg",
-      "rad",
-      "grad",
-      "turn",
-      "s",
-      "ms",
-      "pt",
-      "pc",
-      "cm",
-      "mm",
-      "in"
-    ],
-    "scss/no-duplicate-mixins": true,
-    "scss/no-global-function-names": true,
-    "scss/selector-no-redundant-nesting-selector": true,
-    "scss/dollar-variable-pattern": "^[a-z][a-z0-9-]*$",
-    "scss/at-mixin-pattern": "^[a-z][a-z0-9-]*$",
-    "scss/at-function-pattern": "^[a-z][a-z0-9-]*$",
-    "scss/percent-placeholder-pattern": "^[a-z][a-z0-9-]*$",
-    "scss/no-unused-private-members": true,
-    "scss/at-use-no-unnamespaced": true,
-    "scss/load-no-partial-leading-underscore": true,
-    "scss/no-duplicate-dollar-variables": true,
-    "scss/operator-no-unspaced": true,
-    "scss/at-rule-no-unknown": true,
-    "scss/comment-no-empty": true,
-    "scss/declaration-nested-properties": "never"
-  },
-  "overrides": [
-    {
-      "files": ["**/*.scss"],
-      "customSyntax": "postcss-scss"
-    },
-    {
-      "files": ["**/*.less"],
-      "customSyntax": "postcss-less"
-    },
-    {
-      "files": ["**/*.vue"],
-      "customSyntax": "postcss-html"
-    }
-  ]
+      "px", "em", "rem", "%",
+      "vh", "vw", "vmin", "vmax", "vb", "vi",
+      "svh", "svw", "dvh", "dvw", "lvh", "lvw",
+      "cqw", "cqh", "cqi", "cqb",
+      "fr", "ch", "ex", "ic", "lh", "rlh",
+      "deg", "rad", "grad", "turn",
+      "s", "ms",
+      "pt", "pc", "cm", "mm", "in"
+    ]
+  }
 }

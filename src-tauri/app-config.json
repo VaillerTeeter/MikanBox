@@ -1,0 +1,24 @@
+{
+  "_comment": "编译时配置文件 — 修改后重新编译即可生效，无需改动 Rust 源代码。",
+
+  "bt_trackers": [
+    "udp://tracker.opentrackr.org:1337/announce",
+    "udp://open.tracker.cl:1337/announce",
+    "udp://tracker.openbittorrent.com:80/announce",
+    "udp://tracker.torrent.eu.org:451/announce",
+    "udp://tracker.moeking.me:6969/announce",
+    "udp://tracker.bittor.pw:1337/announce",
+    "udp://tracker1.bt.moack.co.kr:80/announce",
+    "udp://tracker-udp.gbitt.info:80/announce",
+    "udp://open.stealth.si:80/announce",
+    "udp://exodus.desync.com:6969/announce",
+    "https://tracker2.ctix.cn/announce",
+    "https://tracker1.520.jp/announce",
+    "https://tracker.tamersunion.org/announce"
+  ],
+
+  "bt_max_peers": 100,
+  "disk_cache_mb": 64,
+  "listen_port_start": 51413,
+  "listen_port_end": 51420
+}

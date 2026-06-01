@@ -1,7 +1,18 @@
 # rustfmt 配置 — https://rust-lang.github.io/rustfmt/
-# 适用 Rust Edition 2021
+# 适用 Rust Edition 2021 / rustfmt 1.9.0-stable
+# 标注 [nightly] 的选项在 stable rustfmt 中会被忽略，需 rustup override set nightly 生效
 
 edition = "2021"
+
+# ── 换行 / 编码 ──────────────────────────────────────
+
+# 强制 Unix 换行符（LF），跨平台一致性
+newline_style = "Unix"
+
+# 禁止 hard tab（统一空格缩进）
+hard_tabs = false
+
+# ── 宽度与缩进 ───────────────────────────────────────
 
 # 行宽上限
 max_width = 100
@@ -9,80 +20,103 @@ max_width = 100
 # 缩进宽度（空格数）
 tab_spaces = 4
 
-# 缩进风格：块缩进（推荐用于可读性）
+# [nightly] 缩进风格：块缩进（可读性优先）
 indent_style = "Block"
 
-# 启用小启发式（根据内容自动选择单行/多行）
-use_small_heuristics = "Default"
+# 启发式宽度自适应（Off = 严格遵守 max_width）
+use_small_heuristics = "Off"
 
 # ── Import 排序与分组 ────────────────────────────────
+
 # 自动对 use 语句排序
 reorder_imports = true
 
 # 自动对模块声明排序
 reorder_modules = true
 
-# 导入合并粒度：合并到 crate 级别
+# [nightly] 导入合并粒度：合并到 crate 级别（最大程度减少 use 行数）
 imports_granularity = "Crate"
 
-# 分组：std → 外部 crate → 自身 crate
+# [nightly] 分组：std → 外部 crate → 自身 crate
 group_imports = "StdExternalCrate"
 
+# [nightly] impl 块内方法按字母顺序排列
+reorder_impl_items = true
+
 # ── 注释与文档 ───────────────────────────────────────
-# 格式化 doc 注释中的代码块
+
+# [nightly] 格式化 doc 注释中的代码块
 format_code_in_doc_comments = true
 
-# 格式化宏匹配器
+# [nightly] 格式化宏匹配器
 format_macro_matchers = true
 
-# 规范化注释（统一行注释格式）
+# [nightly] 规范化注释（统一行注释格式，补充缺失空格）
 normalize_comments = true
 
-# 规范化文档属性（#[doc = "..."] → /// ...）
+# [nightly] 规范化文档属性（#[doc = "..."] → /// ...）
 normalize_doc_attributes = true
 
-# 自动换行注释，保持在 max_width 内
+# [nightly] 自动折行注释，保持在 max_width 内
 wrap_comments = true
 comment_width = 100
 
 # ── 简写语法 ─────────────────────────────────────────
-# 优先使用 ? 操作符代替 try!()
+
+# [nightly] 使用 ? 操作符代替 try!()
 use_try_shorthand = true
 
-# 结构体初始化时使用字段简写（Foo { x, y } 代替 Foo { x: x, y: y }）
+# 结构体初始化字段简写（Foo { x } 代替 Foo { x: x }）
 use_field_init_shorthand = true
 
-# ── 尾随符号 ─────────────────────────────────────────
-# 多行结构体/枚举/函数参数的最后一项保留尾随逗号
-trailing_comma = "Vertical"
+# 删除多余括号（(a + b) 不必要时去掉外层括号）
+remove_nested_parens = true
 
-# 语句末尾保留分号
+# ── 尾随符号 ─────────────────────────────────────────
+
+# 多行结构体/枚举/函数参数末尾保留逗号（Always 比 Vertical 更严格）
+trailing_comma = "Always"
+
+# [nightly] 语句末尾保留分号
 trailing_semicolon = true
 
-# ── 其他代码风格 ─────────────────────────────────────
-# 压缩通配符后缀（a | b | .. 合并）
-condense_wildcard_suffixes = true
+# ── 括号 / 块风格 ─────────────────────────────────────
 
-# 强制显式 ABI 声明
-force_explicit_abi = true
-
-# match 臂使用块包裹（当内容超过一行时）
-match_arm_blocks = true
-
-# match 块最后一个臂加尾随逗号
-match_block_trailing_comma = true
-
-# 空 impl/struct/enum 使用单行
-empty_item_single_line = true
-
-# 单行函数体（短函数允许写在一行）
-fn_single_line = false
-
-# 结构体字面量允许单行（当字段少且短时）
-struct_lit_single_line = true
-
-# 闭包体换行风格
+# [nightly] 花括号与语句同行（含 where 子句）
 brace_style = "SameLineWhere"
 
-# where 子句风格：条件放在同一行或缩进
+# [nightly] where 子句条件独占一行（每个约束单独一行，更易阅读）
 where_single_line = false
+
+# ── match 表达式 ──────────────────────────────────────
+
+# match 臂内容超过一行时使用块包裹
+match_arm_blocks = true
+
+# [nightly] match 末尾臂加尾随逗号
+match_block_trailing_comma = true
+
+# ── 结构体 / 枚举 / impl ──────────────────────────────
+
+# 空 impl/struct/enum 体使用单行（struct Foo;）
+empty_item_single_line = true
+
+# [nightly] 禁止短函数压缩到单行（保持一致的多行格式）
+fn_single_line = false
+
+# [nightly] 字段少且短的结构体字面量允许单行
+struct_lit_single_line = true
+
+# ── 其他代码风格 ─────────────────────────────────────
+
+# [nightly] 压缩通配符后缀（a | b | ..= c → a | b..=c）
+condense_wildcard_suffixes = true
+
+# 强制显式 ABI 声明（extern "C" 而不是 extern）
+force_explicit_abi = true
+
+# [nightly] 十六进制字面量统一大写（0xDEADBEEF）
+hex_literal_case = "Upper"
+
+# [nightly] 允许超宽的括号定界表达式换行（Vec/函数调用等）
+overflow_delimited_expr = true

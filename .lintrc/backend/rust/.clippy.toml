@@ -1,6 +1,9 @@
 # Clippy 配置 — https://doc.rust-lang.org/clippy/configuration.html
 # 适用于 cargo clippy -- -D warnings -D clippy::pedantic -D clippy::nursery
 
+# ── 最低支持 Rust 版本 ────────────────────────────────
+msrv = "1.80.0"
+
 # ── 函数与复杂度限制 ─────────────────────────────────
 
 # 函数参数数量上限（超过则触发 clippy::too_many_arguments）
@@ -15,39 +18,82 @@ cognitive-complexity-threshold = 10
 # 类型复杂度得分上限（超过则触发 clippy::type_complexity）
 type-complexity-threshold = 250
 
-# ── 安全 / 调试相关 ──────────────────────────────────
+# 嵌套深度上限（超过则触发 clippy::excessive_nesting）
+excessive-nesting-threshold = 5
 
-# 测试代码中允许 println!/print! 宏（不在测试中报错）
-allow-print-in-tests = true
+# 单字符绑定名的允许数量上限（超过则触发 clippy::many_single_char_names）
+single-char-binding-names-threshold = 2
 
-# 是否允许在非内联格式化参数中混用格式
+# ── 结构体 / 枚举约束 ────────────────────────────────
+
+# 结构体中 bool 字段数量上限（建议改用枚举表达状态）
+max-struct-bools = 2
+
+# 函数参数中 bool 数量上限（建议改用枚举或 Builder 模式）
+max-fn-params-bools = 2
+
+# ── 错误类型大小限制 ─────────────────────────────────
+
+# Error 类型占用字节上限（超过则建议 Box<dyn Error>）
+large-error-threshold = 128
+
+# ── 严格模式：所有场景均不豁免 ───────────────────────
+
+# 测试代码中禁止 print!/println!（统一使用日志框架）
+allow-print-in-tests = false
+
+# 测试代码中禁止 dbg!（调试宏不得提交）
+allow-dbg-in-tests = false
+
+# 测试代码中禁止 unwrap()（应使用 expect 配合明确消息，或 ? 操作符）
+allow-unwrap-in-tests = false
+
+# 测试代码中禁止 expect()（应使用 assert! 系列宏或 ? 操作符）
+allow-expect-in-tests = false
+
+# 测试代码中禁止 panic!（应使用 assert! / should_panic 属性）
+allow-panic-in-tests = false
+
+# 禁止非内联格式化参数混用
 allow-mixed-uninlined-format-args = false
 
 # ── 文档检查 ─────────────────────────────────────────
 
-# 检查私有条目的文档
+# 对私有条目也检查文档（pub(crate) / 私有函数均需注释）
 check-private-items = true
 
-# ── 禁用方法列表（推荐显式错误处理） ────────────────
-# 生产代码中禁止使用 unwrap/expect，推荐使用 ? 操作符或 map_err
+# ── 禁用方法列表 ─────────────────────────────────────
 disallowed-methods = [
+  # unwrap 系列：强制显式错误处理
   { path = "std::option::Option::unwrap", reason = "请使用 '?' 或 ok_or/map_err 进行显式错误处理" },
   { path = "std::result::Result::unwrap", reason = "请使用 '?' 或 map_err 进行显式错误处理" },
-  { path = "std::option::Option::expect", reason = "仅限测试或明确 panic 场景，生产代码请改用显式处理" },
-  { path = "std::result::Result::expect", reason = "仅限测试或明确 panic 场景，生产代码请改用显式处理" },
+  { path = "std::option::Option::expect", reason = "请使用 ok_or_else + '?' 进行显式错误处理" },
+  { path = "std::result::Result::expect", reason = "请使用 map_err + '?' 进行显式错误处理" },
+  { path = "std::option::Option::unwrap_unchecked", reason = "unsafe：禁止使用，请改用安全替代" },
+  { path = "std::result::Result::unwrap_unchecked", reason = "unsafe：禁止使用，请改用安全替代" },
+  { path = "std::result::Result::unwrap_err_unchecked", reason = "unsafe：禁止使用" },
+  # mem::forget / transmute：内存安全风险
+  { path = "std::mem::forget", reason = "请使用 ManuallyDrop 或 RAII 模式" },
+  { path = "std::mem::transmute", reason = "unsafe：禁止 transmute，请用安全的转换方法" },
 ]
 
 # ── 禁用宏列表 ───────────────────────────────────────
 disallowed-macros = [
-  { path = "std::panic", reason = "生产代码应返回 Result/Option 而非 panic！" },
+  { path = "std::panic", reason = "生产代码应返回 Result/Option 而非 panic" },
   { path = "std::todo", reason = "合并前须完成 TODO 代码" },
   { path = "std::unimplemented", reason = "合并前须实现该功能" },
+  { path = "std::unreachable", reason = "请使用穷举匹配或 Result 处理，而非 unreachable!" },
+  { path = "std::dbg", reason = "调试宏不得提交到代码库" },
+  { path = "std::print", reason = "请使用 tracing/log 框架替代 print!" },
+  { path = "std::println", reason = "请使用 tracing/log 框架替代 println!" },
+  { path = "std::eprint", reason = "请使用 tracing/log 框架替代 eprint!" },
+  { path = "std::eprintln", reason = "请使用 tracing/log 框架替代 eprintln!" },
 ]
 
 # ── 命名规范 ─────────────────────────────────────────
 
-# 枚举变体名称中允许的前缀（为空时不允许枚举变体名重复枚举名）
+# 枚举变体名称不应重复枚举名前缀（超过 3 个变体时检查）
 enum-variant-name-threshold = 3
 
-# 结构体/枚举字段名最小长度（短于此长度不触发 min-ident-chars）
+# 标识符最短字符数（单字母除外的短名禁止）
 min-ident-chars-threshold = 2

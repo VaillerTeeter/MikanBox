@@ -1,6 +1,0 @@
-{
-  "type": "auto",
-  "lint": {
-    "warnings": ["all"]
-  }
-}

@@ -1,7 +1,6 @@
 ---
-# yamllint 配置
+# yamllint 配置 — 针对 MikanBox 项目
 # 文档：https://yamllint.readthedocs.io/en/stable/configuration.html
-# 用途：通用宽松规则，供 CI（yaml-lint job）及本地开发使用
 
 extends: default
 

@@ -1,8 +1,0 @@
-# Trivy ignore file
-# Format: CVE-YYYY-XXXXX  expiry_date  reason
-# Format: GHSA-xxxx-xxxx-xxxx  expiry_date  reason
-# Leave expiry_date blank to ignore indefinitely
-#
-# Examples (uncomment and customize as needed):
-# CVE-2021-44228  2024-12-31  log4shell - not affected (no log4j in project)
-# GHSA-jfh8-c2jp-jggg  no-fix  upstream dependency, no fix available yet

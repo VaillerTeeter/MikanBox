@@ -1,149 +1,50 @@
 ---
-# ls-lint 配置 — 文件命名规范
+# ls-lint 配置 — 文件命名规范（针对 MikanBox 项目）
 # 文档：https://ls-lint.org/2.x/configuration/the-rules.html
 # 用法：ls-lint --config .lintrc/general/.ls-lint.yml
 
 ls:
   # ============================================================
-  # 默认全局规则（适用于所有未单独配置的目录）
+  # 默认全局规则
   # ============================================================
   .default:
-    .js: kebab-case | camelCase | PascalCase
-    .ts: kebab-case | camelCase | PascalCase
-    .jsx: kebab-case | PascalCase
-    .tsx: kebab-case | PascalCase
-    .css: kebab-case
-    .scss: kebab-case
-    .less: kebab-case
-    .json: kebab-case | camelCase | regex:[A-Z._-]+
+    .ts: kebab-case | camelCase
+    .tsx: PascalCase | camelCase
+    .css: kebab-case | camelCase
+    .json: kebab-case | camelCase
     .yaml: kebab-case | regex:[A-Z._-]+
     .yml: kebab-case | regex:[A-Z._-]+
-    .md: SCREAMING_SNAKE_CASE | kebab-case | regex:[A-Z._-]+
-    .mdx: kebab-case
-    .html: kebab-case
-    .sh: kebab-case
-    .bash: kebab-case
-    .py: snake_case
-    .rb: snake_case
-    .php: PascalCase | snake_case
-    .java: PascalCase
-    .kt: PascalCase
-    .go: snake_case
-    .tf: snake_case
-    .tfvars: snake_case
+    .md: SCREAMING_SNAKE_CASE | kebab-case | snake_case
     .toml: kebab-case | snake_case
-    .ini: kebab-case | snake_case | regex:[._-]+
-    .env: regex:[._-]+
 
   # ============================================================
-  # 源代码目录
+  # .github 目录
   # ============================================================
-  src:
-    .js: camelCase | PascalCase
-    .ts: camelCase | PascalCase
-    .jsx: PascalCase
-    .tsx: PascalCase
-
-  src/components:
-    .tsx: PascalCase
-    .jsx: PascalCase
-    .ts: PascalCase
-    .css: PascalCase | kebab-case
-
-  src/pages:
-    .tsx: kebab-case | PascalCase | regex:\[.*\]
-    .ts: kebab-case | PascalCase | regex:\[.*\]
-
-  src/hooks:
-    .ts: camelCase
-
-  src/utils:
-    .ts: camelCase | kebab-case
-
-  src/lib:
-    .ts: camelCase | kebab-case
-
-  src/types:
-    .ts: camelCase | PascalCase
-
-  src/store:
-    .ts: camelCase
-
-  src/api:
-    .ts: camelCase | kebab-case
-
-  src/middleware:
-    .ts: camelCase | kebab-case
-
-  # ============================================================
-  # 测试文件目录
-  # ============================================================
-  tests:
-    .py: snake_case
-    .ts: camelCase | PascalCase | kebab-case
-    .tsx: PascalCase | kebab-case
-    .js: camelCase | PascalCase | kebab-case
-    .rb: snake_case
-    .java: PascalCase
-
-  # ============================================================
-  # 基础设施目录
-  # ============================================================
-  terraform:
-    .tf: snake_case
-    .tfvars: snake_case
-
-  k8s:
-    .yaml: kebab-case
-    .yml: kebab-case
-
-  helm:
-    .yaml: camelCase | kebab-case
-    .yml: camelCase | kebab-case
-
   .github:
     .yml: kebab-case
     .yaml: kebab-case
     .json: kebab-case
+    .md: SCREAMING_SNAKE_CASE | kebab-case | snake_case
 
   # ============================================================
-  # 文档目录
-  # ============================================================
-  docs:
-    .md: SCREAMING_SNAKE_CASE | kebab-case
-    .mdx: kebab-case
-
-  # ============================================================
-  # 脚本目录
+  # scripts 目录（PowerShell 脚本）
   # ============================================================
   scripts:
-    .sh: kebab-case
-    .ps1: kebab-case | PascalCase
+    .ps1: kebab-case
 
   # ============================================================
-  # Python 项目
+  # src-tauri 目录（Rust 命名规范：snake_case）
   # ============================================================
-  app:
-    .py: snake_case
+  src-tauri:
+    .rs: snake_case
+    .toml: kebab-case | snake_case
+    .json: kebab-case | snake_case
 
 # ============================================================
-# 忽略规则（精确路径或 glob）
+# 忽略路径
 # ============================================================
 ignore:
   - .git
   - node_modules
-  - .venv
-  - venv
-  - vendor
   - dist
-  - build
-  - coverage
-  - .next
-  - .nuxt
-  - .svelte-kit
-  - __pycache__
-  - .mypy_cache
-  - .pytest_cache
-  - .tox
-  - .terraform
-  - .eggs
+  - src-tauri/target

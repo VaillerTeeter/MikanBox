@@ -11,6 +11,16 @@ trim_trailing_whitespace = true
 [*.md]
 trim_trailing_whitespace = false
 
+# Rust: rustfmt defaults to 4-space indentation
+[*.rs]
+indent_size = 4
+
+# PowerShell: PS 5.1 requires UTF-8 BOM + CRLF; set here so VS Code saves correctly
+# without needing the manual python re-encoding step after every edit
+[*.ps1]
+charset = utf-8-bom
+end_of_line = crlf
+
 # GPL v3 standard legal text — indentation is part of the original document
 [LICENSE]
 indent_size = unset
