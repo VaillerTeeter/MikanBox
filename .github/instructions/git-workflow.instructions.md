@@ -6,7 +6,8 @@ applyTo: "**"
 # AI Git Workflow Rules
 
 <!-- 本文件约束 AI 在 git / gh / GitHub MCP 操作上的行为。
-     物理拦截由 .github/hooks/scripts/git-guard.sh 负责；本文件为 AI 行为规范。 -->
+     物理拦截由 .github/hooks/scripts/git-guard.sh 负责；本文件为 AI 行为规范。
+     中文注释仅供人类维护者阅读，AI 执行纯英文规则。 -->
 
 <!-- ============================================================
   .instructions.md 写作规范
@@ -54,9 +55,9 @@ NEVER commit or push directly to `master`.
 Always create a feature branch before any commit:
 <!-- 所有变更走功能分支，命名规范如下 -->
 ```text
-feat/<description>   # 新功能
-fix/<description>    # 修复
-chore/<description>  # 维护/杂项
+feat/<description>   # new feature
+fix/<description>    # bug fix
+chore/<description>  # maintenance / chore
 ```
 
 NEVER use Chinese characters in commit messages (subject or body).
@@ -98,9 +99,9 @@ Always prefer GitHub MCP tools over `gh` CLI for any GitHub operation (issues, P
 <!-- GitHub 操作优先用 MCP 工具，其次才是 gh CLI，最后才是裸 git 命令 -->
 
 ```text
-1st choice: mcp_github_*        # GitHub MCP — 结构化、无需 shell
-2nd choice: gh <command>        # gh CLI — 需要 token 加载
-3rd choice: git <command>       # 仅限纯本地操作（log / diff / status 等）
+1st choice: mcp_github_*   # structured API, no shell needed
+2nd choice: gh <command>   # requires GH_TOKEN from .env
+3rd choice: git <command>  # local operations only (log / diff / status)
 ```
 
 Always load the auth token from `.env` before running any `gh` command:

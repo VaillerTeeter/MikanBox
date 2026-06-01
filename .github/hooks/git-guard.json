@@ -5,7 +5,7 @@
         "type": "command",
         "linux": "bash .github/hooks/scripts/git-guard.sh",
         "osx": "bash .github/hooks/scripts/git-guard.sh",
-        "windows": "bash .github/hooks/scripts/git-guard.sh",
+        "windows": "python .github/hooks/scripts/git-guard.py",
         "timeout": 5
       }
     ]

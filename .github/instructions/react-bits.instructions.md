@@ -7,7 +7,8 @@ applyTo: "**"
 
 <!-- 本文件约束 AI 在引入 React Bits 动效组件时的行为。
      React Bits 不是 npm 包，是一个复制粘贴式源码库，组件代码直接属于本项目。
-     官网：https://reactbits.dev  源仓库：https://github.com/DavidHDev/react-bits -->
+     官网：https://reactbits.dev  源仓库：https://github.com/DavidHDev/react-bits
+     中文注释仅供人类维护者阅读，AI 执行纯英文规则。 -->
 
 <!-- ============================================================
   适用场景（满足任一即触发）：
