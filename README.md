@@ -2,12 +2,21 @@
 
 基于 [Bangumi API](https://github.com/bangumi/api) 的 Windows 桌面番剧管理工具，使用 Tauri v2 + React + TypeScript + Rust 构建。
 
-## 功能规划
+## 已实现功能
 
-- **季度番剧查询** — 按季度浏览 Bangumi 番剧列表，查看详情、评分、简介
-- **追番管理** — 管理个人收藏与追番进度，同步 Bangumi 账号数据
-- **番剧下载** — 集成番剧下载站点，管理下载任务
-- **轨道合并与标签** — 对番剧视频文件进行字幕/音轨合并，添加元数据标签
+- **季度番剧查询** — 按年份 + 季度浏览 Bangumi 番剧列表，支持平台 / 来源 / 标签 / 地区 / 受众多维筛选，查看详情、评分、简介、剧集、角色、演职人员
+- **追番管理** — 正在追番 / 补番计划 / 已完番剧三状态收藏，周历视图、网格视图切换
+- **资源搜索** — 搜索 Nyaa 字幕组资源，支持多关键词 AND / OR / NOT 逻辑组合，一键添加磁力下载
+- **番剧下载** — 内嵌 aria2c sidecar，磁力链接下载，任务全生命周期管理（下载中 / 暂停 / 恢复 / 取消 / 重启），状态机防止非法转换；显示阶段、连接数、做种数诊断信息；下载设置弹窗支持 BT Tracker 列表管理、高级参数配置（最大 Peer 数 / 磁盘缓存 / 监听端口），配置全部持久化到磁盘，支持 JSON 导入 / 导出，脏标记提示未保存修改
+- **轨道合并** — MKV 轨道工坊，识别视频 / 音频 / 字幕轨道，支持双文件队列合并（A 版视频 + B 版字幕），实时进度推送，自动清空轨道名称，输出目录默认为 A 版文件所在目录；内嵌 mkvmerge sidecar
+
+## 规划中
+
+- **RSS 自动订阅** — 订阅蜜柑计划 / Nyaa RSS 源，按番剧 + 字幕组规则自动匹配新集并推送到下载队列，无需手动搜索
+- **文件自动重命名** — 下载完成后按 `[字幕组] 番剧名 - 集数 [分辨率].mkv` 规范自动重命名，支持自定义模板
+- **Bangumi 进度同步** — 在追番页一键将本地观看进度（已看集数）写回 Bangumi，保持在线收藏数据一致
+- **本地视频库** — 扫描指定目录，将本地 MKV / MP4 文件与 Bangumi 番剧条目自动关联，支持调用外部播放器
+- **桌面通知** — 下载完成、新集到达、合并结束时推送 Windows 系统通知
 
 ## 目录结构
 
@@ -29,7 +38,8 @@
 │   ├── hooks/                                      # Git Hook 脚本
 │   │   ├── git-guard.json                         # Claude Code PreToolUse hook 注册配置
 │   │   └── scripts/
-│   │       └── git-guard.sh                       # git/gh 危险写操作拦截脚本
+│   │       ├── git-guard.sh                        # Linux / macOS 拦截脚本（bash + python3）
+│   │       └── git-guard.py                        # Windows 拦截脚本（纯 Python 3，无需 bash）
 │   ├── instructions/                               # GitHub Copilot 指令文件
 │   │   ├── context7.instructions.md              # Context7 MCP 文档查询规范
 │   │   ├── git-workflow.instructions.md           # AI git 操作行为规范
@@ -37,7 +47,7 @@
 │   ├── ISSUE_TEMPLATE/                            # Issue 模板（中英文 bug/feature 各一份）
 │   ├── PULL_REQUEST_TEMPLATE.md                   # PR 描述模板
 │   └── workflows/
-│       └── lint.yml                               # CI Lint 工作流（14 项检查）
+│       └── lint.yml                               # CI Lint 工作流（15 项检查）
 ├── .lintrc/                                        # 各工具 Lint 配置
 │   ├── backend/rust/
 │   │   ├── .clippy.toml                           # Clippy 静态分析规则
@@ -72,24 +82,30 @@
 │   └── settings.json                              # 工作区设置（格式化/lint/Tauri 等）
 ├── public/                                         # 静态资源（Vite 原样复制）
 ├── scripts/
+│   ├── download-aria2.ps1                         # 自动下载 aria2c 二进制（Tauri sidecar）
+│   ├── download-mkvmerge.ps1                      # 自动下载 mkvmerge 二进制（Tauri sidecar）
 │   └── setup-windows.ps1                          # Windows 开发环境一键检查/安装脚本
 ├── src/                                            # React 前端源代码
 │   ├── assets/
 │   │   └── fonts/
 │   │       └── ZCOOLKuaiLe-Regular.ttf            # 站酷快乐体（内置，无需网络）
 │   ├── pages/                                      # 页面组件（每项导航对应一个页面）
-│   │   ├── BacklogPage.tsx                        # 想看
-│   │   ├── DownloadPage.tsx                       # 下载
-│   │   ├── FinishedPage.tsx                       # 看过
+│   │   ├── BacklogPage.tsx                        # 补番计划
+│   │   ├── DownloadPage.tsx                       # 下载管理
+│   │   ├── FinishedPage.tsx                       # 已完番剧
 │   │   ├── QueryPage.tsx                          # 季度查询
-│   │   ├── SearchPage.tsx                         # 搜索
-│   │   ├── TracksPage.tsx                         # 轨道工具
-│   │   └── WatchingPage.tsx                       # 在看
+│   │   ├── SearchPage.tsx                         # 搜索资源
+│   │   ├── TracksPage.tsx                         # 轨道工坊
+│   │   ├── WatchingPage.tsx                       # 正在追番
+│   │   └── WatchListPage.tsx                      # 追番列表基础页（WatchingPage / BacklogPage 复用）
+│   ├── store/                                      # 全局状态
+│   │   ├── downloadStore.tsx                      # 下载任务 Context（状态机 + aria2 事件 + localStorage）
+│   │   └── watchStore.ts                          # 追番收藏 localStorage 工具函数
 │   ├── styles/
 │   │   ├── fonts.css                              # @font-face 声明（引用内置字体文件）
 │   │   └── theme.css                              # 主题 CSS 变量（皮肤切换入口）
-│   ├── App.css                                    # 全局布局样式
-│   ├── App.tsx                                    # 根组件（主窗口布局：顶栏 + 左侧导航栏）
+│   ├── App.css                                    # 全局布局与组件样式（颜色全部引用 theme.css 变量）
+│   ├── App.tsx                                    # 根组件（主窗口布局：顶栏 + 左侧导航栏 + 下载设置弹窗：Tracker / 高级参数 / 导入导出）
 │   ├── main.tsx                                   # React 入口
 │   └── vite-env.d.ts                              # Vite 类型声明
 ├── src-tauri/                                      # Tauri/Rust 后端
@@ -97,7 +113,7 @@
 │   │   └── default.json                           # Tauri ACL 权限配置
 │   ├── icons/                                     # 应用图标（Windows Store 等多尺寸）
 │   ├── src/
-│   │   ├── lib.rs                                 # Tauri 命令注册与应用初始化
+│   │   ├── lib.rs                                 # Tauri 命令 + aria2 控制 + mkvmerge 轨道识别与合并 + BT Tracker 持久化 + 高级参数持久化（AdvancedConfig）
 │   │   └── main.rs                                # Rust 程序入口
 │   ├── build.rs                                   # Tauri 构建脚本
 │   ├── Cargo.lock                                 # 依赖版本锁定
@@ -159,6 +175,12 @@
 
 # 2. 安装 npm 依赖
 yarn install
+
+# 3. 下载 aria2c 二进制（Tauri sidecar，首次必须执行）
+.\scripts\download-aria2.ps1
+
+# 4. 下载 mkvmerge 二进制（Tauri sidecar，轨道合并功能必须执行）
+.\scripts\download-mkvmerge.ps1
 ```
 
 脚本会依次检查：winget → Node.js v24 → yarn → rustup → Rust stable MSVC 工具链 → C++ Build Tools → WebView2 → Tauri CLI。
@@ -216,7 +238,7 @@ yarn tauri build
 
 在每次会话开始时，请发送以下提示词，让 AI 优先读取项目规范后再开始工作：
 
-> 开始工作前，先读取 `.github/instructions/` 目录下所有 `.instructions.md` 文件，完全理解其中的规则后再响应。
+> 开始工作前，先读取 `.github/` 目录下所有 `.instructions.md` 文件，完全理解其中的规则后再响应。
 
 目前包含的指令文件：
 
@@ -239,12 +261,48 @@ yarn tauri build
 - [Bangumi API 文档](https://bangumi.github.io/api/) — 在线 API 文档（Swagger UI）
 - [Bangumi Personal Access Token](https://next.bgm.tv/demo/access-token) — 创建用于认证的 Access Token
 
+### 资源平台
+
+- [Nyaa.si](https://nyaa.si/) — 番剧资源搜索平台（字幕组磁力资源）
+
+### 下载核心
+
+- [aria2](https://aria2.github.io/) — 高性能多协议下载工具（本项目以 Tauri sidecar 方式内嵌）
+- [aria2 JSON-RPC 协议文档](https://aria2.github.io/manual/en/html/aria2c.html#rpc-interface) — aria2 RPC 接口参考
+- [MKVToolNix](https://mkvtoolnix.download/) — MKV 封装工具集（mkvmerge 以 Tauri sidecar 方式内嵌，用于轨道合并）
+
+### 前端 UI
+
+- [animal-island-ui](https://github.com/ShenQingchuan/animal-island-ui) — 项目使用的 React 组件库（Button / Icon / Modal / Table 等）
+- [Motion](https://motion.dev/) — React 动画库（`motion/react`）
+- [React Bits](https://reactbits.dev/) — 动效组件源码库（源码复制方式引入，非 npm 包）
+
+### Bangumi API 客户端
+
+- [bangumi-api-client](https://www.npmjs.com/package/bangumi-api-client) — TypeScript Bangumi API 客户端（本项目使用）
+
 ### 技术栈
 
 - [Tauri v2](https://tauri.app/) — Windows 桌面应用框架（Rust 后端 + WebView2）
 - [React 19](https://react.dev/) — 前端 UI 框架
 - [Vite 7](https://vite.dev/) — 前端构建工具
 - [TypeScript](https://www.typescriptlang.org/) — 类型安全的 JavaScript 超集
+- [Tokio](https://tokio.rs/) — Rust 异步运行时（aria2 轮询、RPC 调用）
+- [reqwest](https://docs.rs/reqwest/) — Rust HTTP 客户端（aria2 JSON-RPC 通信）
+- [Serde](https://serde.rs/) — Rust 序列化 / 反序列化框架
+
+### CI / Lint 工具
+
+- [ESLint](https://eslint.org/) — TypeScript/React 静态分析
+- [Prettier](https://prettier.io/) — 代码格式化
+- [Stylelint](https://stylelint.io/) — CSS 规范检查
+- [Clippy](https://doc.rust-lang.org/clippy/) — Rust 静态分析
+- [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli) — Markdown 规范检查
+- [CSpell](https://cspell.org/) — 拼写检查
+- [Gitleaks](https://gitleaks.io/) — 密钥 / 凭据泄露扫描
+- [Semgrep](https://semgrep.dev/) — OWASP Top 10 安全扫描
+- [Knip](https://knip.dev/) — 未使用导出 / 依赖检测
+- [Commitlint](https://commitlint.js.org/) — Commit message 规范校验
 
 ### 作者
 
