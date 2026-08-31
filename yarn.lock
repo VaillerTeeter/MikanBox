@@ -257,10 +257,10 @@
   dependencies:
     "@rolldown/pluginutils" "^1.0.1"
 
-animal-island-ui@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/animal-island-ui/-/animal-island-ui-1.6.0.tgz#3a8a68f7622b70f9c82493c84329b0ecd39d1618"
-  integrity sha512-VpQB+EnOxYO78seDR6DtN1QheaZrY8zj6Vprc/M0i1yqpd1a1Q8Ob9oOculTvXH2OCUjdBywzeKuH3gQfqnnsw==
+animal-island-ui@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/animal-island-ui/-/animal-island-ui-1.7.0.tgz#0356a598fec0ff6b38ef2afe85014badbb42abc7"
+  integrity sha512-KVqjaZBHQuoEYjswuRfnyB0aLQfnUM6H0tJqeXXrzwL1UQI0qXjDMNPEwIrUb8cyIt9nwwIW1NAxEiBwMVbStw==
 
 bangumi-api-client@^2026.6.14:
   version "2026.6.14"
